@@ -3,8 +3,10 @@ services:
   - type: web
     name: todo-api
     env: docker
-    buildCommand: docker build -t todo-api .
+    plan: free
+    buildCommand: chmod +x start.sh && docker build -t todo-api .
     startCommand: docker run -p $PORT:80 todo-api
+    healthCheckPath: /api/todos
     envVars:
       - key: APP_KEY
         generateValue: true
@@ -12,8 +14,10 @@ services:
         value: production
       - key: APP_DEBUG
         value: false
+      - key: APP_URL
+        sync: false
       - key: DB_CONNECTION
-        value: mysql
+        value: pgsql
       - key: DB_HOST
         fromDatabase:
           name: todo_db
@@ -34,7 +38,15 @@ services:
         fromDatabase:
           name: todo_db
           property: password
+      - key: LOG_CHANNEL
+        value: stack
+      - key: CACHE_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
 
 databases:
   - name: todo_db
     plan: free
+    databaseName: todo_db
+    ipAllowList: []
