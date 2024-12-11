@@ -5,6 +5,11 @@
         "description": "A simple Todo API with CRUD operations",
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "https://calm-sparkle-production.up.railway.app"
+        }
+    ],
     "paths": {
         "/api/todos": {
             "get": {
